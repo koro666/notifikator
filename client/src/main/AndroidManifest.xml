@@ -1,3 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="net.kzxiv.notify.client">
-	<application android:allowBackup="true" />
+	<application android:allowBackup="true">
+		<service
+			android:name=".NotificationService"
+			android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+			<intent-filter>
+				<action android:name="android.service.notification.NotificationListenerService" />
+			</intent-filter>
+		</service>
+	</application>
 </manifest>
