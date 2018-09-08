@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/general">
+		<SwitchPreference
+			android:title="@string/enabled"
+			android:summary="@string/enabled_summary"
+			android:key="@string/key_enabled"
+			android:defaultValue="true" />
+		<CheckBoxPreference
+			android:title="@string/wifionly"
+			android:summary="@string/wifionly_summary"
+			android:key="@string/key_wifionly"
+			android:defaultValue="false" />
+		<ListPreference
+			android:title="@string/protocol"
+			android:summary="@string/protocol_summary"
+			android:key="@string/key_protocol"
+			android:entries="@array/protocols"
+			android:entryValues="@array/protocol_names"
+			android:defaultValue="@string/protocol_kodi" />
+		<Preference
+			android:title="@string/notification_access"
+			android:summary="@string/notification_access_summary">
+			<intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" />
+		</Preference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/endpoint">
+		<EditTextPreference
+			android:title="@string/url"
+			android:key="@string/key_endpointurl"
+			android:summary="@string/url_summary"
+			android:inputType="textUri"
+			android:defaultValue="http://htpc/jsonrpc" />
+		<CheckBoxPreference
+			android:title="@string/enable_auth"
+			android:summary="@string/enable_auth_summary"
+			android:key="@string/key_endpointauth"
+			android:defaultValue="false" />
+		<EditTextPreference
+			android:title="@string/username"
+			android:summary="@string/username_summary"
+			android:key="@string/key_endpointuser"
+			android:dependency="@string/key_endpointauth"
+			android:defaultValue="kodi" />
+		<EditTextPreference
+			android:title="@string/password"
+			android:summary="@string/password_summary"
+			android:key="@string/key_endpointpw"
+			android:dependency="@string/key_endpointauth"
+			android:inputType="textPassword"
+			android:defaultValue="" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/test">
+		<Preference
+			android:title="@string/send_notification"
+			android:summary="@string/send_notification_summary"
+			android:key="@string/key_send" />
+	</PreferenceCategory>
+</PreferenceScreen>

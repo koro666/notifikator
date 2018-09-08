@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Notifikator</string>
+
+	<string name="key_enabled">Enabled</string>
+	<string name="key_wifionly">WifiOnly</string>
+	<string name="key_protocol">Protocol</string>
+	<string name="key_endpointurl">EndpointURL</string>
+	<string name="key_endpointauth">EndpointAuthenticate</string>
+	<string name="key_endpointuser">EndpointUsername</string>
+	<string name="key_endpointpw">EndpointPassword</string>
+	<string name="key_send">NotificationSend</string>
+
+	<string name="protocol_kodi">kodi</string>
+	<string name="protocol_kodi_addon">kodi+addon</string>
+	<string name="protocol_adtv">de.cyberdream.androidtv.notifications</string>
+	<string name="protocol_json">json</string>
+
+	<string-array name="protocols">
+		<item>Kodi</item>
+		<item>Kodi (Addon)</item>
+		<item>Notifications for Android TV</item>
+		<item>JSON</item>
+	</string-array>
+
+	<string-array name="protocol_names">
+		<item>@string/protocol_kodi</item>
+		<item>@string/protocol_kodi_addon</item>
+		<item>@string/protocol_adtv</item>
+		<item>@string/protocol_json</item>
+	</string-array>
+
+	<string name="general">General</string>
+	<string name="enabled">Enabled</string>
+	<string name="enabled_summary">Forward received notifications</string>
+	<string name="wifionly">Wi-Fi Only</string>
+	<string name="wifionly_summary">Only forward notifications when connected to Wi-Fi</string>
+	<string name="protocol">Protocol</string>
+	<string name="protocol_summary">How to encode the notification data.</string>
+	<string name="notification_access">Open Notification Access</string>
+	<string name="notification_access_summary">Give notification access to this application</string>
+	<string name="endpoint">Endpoint</string>
+	<string name="url">URL</string>
+	<string name="url_summary">Address of HTTP endpoint</string>
+	<string name="enable_auth">Enable Authentication</string>
+	<string name="enable_auth_summary">Use HTTP authentication</string>
+	<string name="username">Username</string>
+	<string name="username_summary">Username for HTTP authentication</string>
+	<string name="password">Password</string>
+	<string name="password_summary">Password for HTTP authentication</string>
+	<string name="test">Testing</string>
+	<string name="send_notification">Send Notification</string>
+	<string name="send_notification_summary">Send a test notification</string>
+
+	<string name="notification_title">Test Notification</string>
+	<string name="notification_text">This is some dummy text.</string>
+</resources>
