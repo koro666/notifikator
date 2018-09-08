@@ -3,10 +3,12 @@ package net.kzxiv.notify.client;
 import android.app.*;
 import android.content.*;
 import android.content.res.*;
+import android.graphics.*;
 import android.net.*;
 import android.preference.*;
 import android.service.notification.*;
 import android.util.*;
+import org.json.*;
 
 public class NotificationService extends NotificationListenerService
 {
@@ -63,17 +65,18 @@ public class NotificationService extends NotificationListenerService
 		final String endpointUsername = prefs.getString(res.getString(R.string.key_endpointuser), null);
 		final String endpointPassword = prefs.getString(res.getString(R.string.key_endpointpw), null);
 
+		String packageName = sbn.getPackageName();
 		Notification notification = sbn.getNotification();
 
 		Object[] payload;
 		if (res.getString(R.string.protocol_kodi).equals(protocol))
-			payload = getPayloadKodi(notification);
+			payload = getPayloadKodi(packageName, notification);
 		else if (res.getString(R.string.protocol_kodi_addon).equals(protocol))
-			payload = getPayloadKodiAddon(notification);
+			payload = getPayloadKodiAddon(packageName, notification);
 		else if (res.getString(R.string.protocol_adtv).equals(protocol))
-			payload = getPayloadAdtv(notification);
+			payload = getPayloadAdtv(packageName, notification);
 		else if (res.getString(R.string.protocol_json).equals(protocol))
-			payload = getPayloadJson(notification);
+			payload = getPayloadJson(packageName, notification);
 		else
 			payload = null;
 
@@ -102,27 +105,52 @@ public class NotificationService extends NotificationListenerService
 	{
 	}
 
-	private final Object[] getPayloadKodi(Notification notification)
+	private final Object[] getPayloadKodi(String packageName, Notification notification)
 	{
 		// TODO:
 		return null;
 	}
 
-	private final Object[] getPayloadKodiAddon(Notification notification)
+	private final Object[] getPayloadKodiAddon(String packageName, Notification notification)
 	{
 		// TODO:
 		return null;
 	}
 
-	private final Object[] getPayloadAdtv(Notification notification)
+	private final Object[] getPayloadAdtv(String packageName, Notification notification)
 	{
 		// TODO:
 		return null;
 	}
 
-	private final Object[] getPayloadJson(Notification notification)
+	private final Object[] getPayloadJson(String packageName, Notification notification)
 	{
-		// TODO:
-		return new Object[] { "application/json", "{}".getBytes() };
+		final String title = notification.extras.getString(Notification.EXTRA_TITLE);
+		final String text = notification.extras.getString(Notification.EXTRA_TEXT);
+		final Bitmap iconSm = BitmapHelper.getPackageIcon(this, packageName, notification.extras.getInt(Notification.EXTRA_SMALL_ICON));
+		final Bitmap iconLg = (Bitmap)notification.extras.get(Notification.EXTRA_LARGE_ICON);
+
+		JSONObject result = new JSONObject();
+		try
+		{
+			if (title != null)
+				result.put("title", title);
+			if (text != null || iconSm != null || iconLg != null)
+			{
+				JSONObject options = new JSONObject();
+
+				if (text != null)
+					options.put("body", text);
+				if (iconSm != null)
+					options.put("badge", BitmapHelper.getDataUri(BitmapHelper.ensureSize(iconSm, 72, 72)));
+				if (iconLg != null)
+					options.put("icon", BitmapHelper.getDataUri(BitmapHelper.ensureSize(iconLg, 192, 192)));
+
+				result.put("options", options);
+			}
+		}
+		catch (JSONException ex) {}
+
+		return new Object[] { "application/json", result.toString().getBytes() };
 	}
 }
