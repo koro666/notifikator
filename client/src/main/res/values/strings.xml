@@ -36,7 +36,7 @@
 	<string name="wifionly">Wi-Fi Only</string>
 	<string name="wifionly_summary">Only forward notifications when connected to Wi-Fi</string>
 	<string name="protocol">Protocol</string>
-	<string name="protocol_summary">How to encode the notification data.</string>
+	<string name="protocol_summary">How to encode the notification data</string>
 	<string name="notification_access">Open Notification Access</string>
 	<string name="notification_access_summary">Give notification access to this application</string>
 	<string name="endpoint">Endpoint</string>
