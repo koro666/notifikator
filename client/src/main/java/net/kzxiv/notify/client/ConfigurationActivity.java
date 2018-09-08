@@ -2,6 +2,8 @@ package net.kzxiv.notify.client;
 
 import android.app.*;
 import android.content.res.*;
+import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.*;
 import android.preference.*;
 
@@ -25,10 +27,12 @@ public class ConfigurationActivity extends PreferenceActivity
 
 			nb.setContentTitle(res.getString(R.string.notification_title));
 			nb.setContentText(res.getString(R.string.notification_text));
-			// TODO: Set real small icon from app
+			// TODO: Set real icons from app
 			nb.setSmallIcon(android.R.drawable.sym_def_app_icon);
 
-			// TODO: Set large icon
+			BitmapDrawable largeIconDrawable = (BitmapDrawable) res.getDrawable(android.R.drawable.sym_def_app_icon);
+			Bitmap largeIconBitmap = largeIconDrawable.getBitmap();
+			nb.setLargeIcon(largeIconBitmap);
 
 			mgr.notify(0, nb.build());
 			return false;
