@@ -105,10 +105,37 @@ public class NotificationService extends NotificationListenerService
 	{
 	}
 
+	private final static int determineDisplayTime(String title, String text)
+	{
+		final int rawTime = ((title.length() + text.length()) * 1000) / 5;
+		return Math.max(5000, rawTime);
+	}
+
 	private final Object[] getPayloadKodi(String packageName, Notification notification)
 	{
-		// TODO:
-		return null;
+		final String title = notification.extras.getString(Notification.EXTRA_TITLE);
+		final String text = notification.extras.getString(Notification.EXTRA_TEXT);
+
+		if (title == null || text == null)
+			return null;
+
+		JSONObject result = new JSONObject();
+		try
+		{
+			result.put("jsonrpc", "2.0");
+			result.put("method", "GUI.ShowNotification");
+			result.put("id", 0);
+
+			JSONObject parameters = new JSONObject();
+			parameters.put("title", title);
+			parameters.put("message", text);
+			parameters.put("displaytime", determineDisplayTime(title, text));
+
+			result.put("params", parameters);
+		}
+		catch (JSONException ex) {}
+
+		return new Object[] { "application/json", result.toString().getBytes() };
 	}
 
 	private final Object[] getPayloadKodiAddon(String packageName, Notification notification)

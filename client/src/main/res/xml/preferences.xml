@@ -30,7 +30,7 @@
 			android:key="@string/key_endpointurl"
 			android:summary="@string/url_summary"
 			android:inputType="textUri"
-			android:defaultValue="http://htpc/jsonrpc" />
+			android:defaultValue="http://htpc:8080/jsonrpc" />
 		<CheckBoxPreference
 			android:title="@string/enable_auth"
 			android:summary="@string/enable_auth_summary"
