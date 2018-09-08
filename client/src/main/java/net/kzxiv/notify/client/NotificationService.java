@@ -140,8 +140,35 @@ public class NotificationService extends NotificationListenerService
 
 	private final Object[] getPayloadKodiAddon(String packageName, Notification notification)
 	{
-		// TODO:
-		return null;
+		final String title = notification.extras.getString(Notification.EXTRA_TITLE);
+		final String text = notification.extras.getString(Notification.EXTRA_TEXT);
+		final Bitmap icon = (Bitmap)notification.extras.get(Notification.EXTRA_LARGE_ICON);
+
+		if (title == null || text == null)
+			return null;
+
+		JSONObject result = new JSONObject();
+		try
+		{
+			result.put("jsonrpc", "2.0");
+			result.put("method", "Addons.ExecuteAddon");
+			result.put("id", 0);
+
+			JSONObject parameters0 = new JSONObject();
+			parameters0.put("addonid", "script.notifikator");
+
+			JSONObject parameters1 = new JSONObject();
+			parameters1.put("title", title);
+			parameters1.put("message", text);
+			parameters1.put("image", icon == null ? "" : BitmapHelper.getBase64(BitmapHelper.ensureSize(icon, 75, 75)));
+			parameters1.put("displaytime", Integer.toString(determineDisplayTime(title, text)));
+
+			parameters0.put("params", parameters1);
+			result.put("params", parameters0);
+		}
+		catch (JSONException ex) {}
+
+		return new Object[] { "application/json", result.toString().getBytes() };
 	}
 
 	private final Object[] getPayloadAdtv(String packageName, Notification notification)
