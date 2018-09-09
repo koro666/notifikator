@@ -27,10 +27,9 @@ public class ConfigurationActivity extends PreferenceActivity
 
 			nb.setContentTitle(res.getString(R.string.notification_title));
 			nb.setContentText(res.getString(R.string.notification_text));
-			// TODO: Set real icons from app
-			nb.setSmallIcon(android.R.drawable.sym_def_app_icon);
+			nb.setSmallIcon(R.drawable.mask);
 
-			BitmapDrawable largeIconDrawable = (BitmapDrawable) res.getDrawable(android.R.drawable.sym_def_app_icon);
+			BitmapDrawable largeIconDrawable = (BitmapDrawable) res.getDrawable(R.drawable.icon);
 			Bitmap largeIconBitmap = largeIconDrawable.getBitmap();
 			nb.setLargeIcon(largeIconBitmap);
 
