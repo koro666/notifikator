@@ -82,7 +82,7 @@ icons: \
 	convert -background transparent -resize 96x96 -depth 8 $^ $@
 	pngout -c4 -k0 -q -force $@
 
-../addon/script.notifikator/resources/icon.png: icon.svg
+../addon/script.notifikator/resources/icon.png: kodi.svg
 	mkdir -p $(dir $@)
 	convert -background black -resize 512x512 -depth 8 $^ $@
 	pngout -c6 -k0 -q -force $@
