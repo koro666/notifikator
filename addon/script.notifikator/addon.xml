@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.notifikator" name="Notifikator" version="0.1" provider-name="kzxiv.net">
+<addon id="script.notifikator" name="Notifikator" version="1.0" provider-name="kzxiv.net">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
 		<import addon="xbmc.gui" version="5.12.0"/>
