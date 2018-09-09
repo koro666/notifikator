@@ -2,13 +2,16 @@ package net.kzxiv.notify.client;
 
 import android.app.*;
 import android.content.*;
+import android.content.pm.*;
 import android.content.res.*;
 import android.graphics.*;
+import android.graphics.drawable.*;
 import android.net.*;
 import android.preference.*;
 import android.service.notification.*;
 import android.util.*;
 import org.json.*;
+import java.io.*;
 
 public class NotificationService extends NotificationListenerService
 {
@@ -105,6 +108,23 @@ public class NotificationService extends NotificationListenerService
 	{
 	}
 
+	private final String getApplicationName(String packageName)
+	{
+		String app = packageName;
+		PackageManager pkg = getPackageManager();
+		ApplicationInfo info;
+		try
+		{
+			info = pkg.getApplicationInfo(packageName, 0);
+		}
+		catch (PackageManager.NameNotFoundException ex)
+		{
+			return packageName;
+		}
+
+		return pkg.getApplicationLabel(info).toString();
+	}
+
 	private final static int determineDisplayTime(String title, String text)
 	{
 		final int rawTime = ((title.length() + text.length()) * 1000) / 5;
@@ -142,10 +162,11 @@ public class NotificationService extends NotificationListenerService
 	{
 		final String title = notification.extras.getString(Notification.EXTRA_TITLE);
 		final String text = notification.extras.getString(Notification.EXTRA_TEXT);
-		final Bitmap icon = (Bitmap)notification.extras.get(Notification.EXTRA_LARGE_ICON);
 
 		if (title == null || text == null)
 			return null;
+
+		final Bitmap icon = (Bitmap)notification.extras.get(Notification.EXTRA_LARGE_ICON);
 
 		JSONObject result = new JSONObject();
 		try
@@ -173,8 +194,48 @@ public class NotificationService extends NotificationListenerService
 
 	private final Object[] getPayloadAdtv(String packageName, Notification notification)
 	{
-		// TODO:
-		return null;
+		final String title = notification.extras.getString(Notification.EXTRA_TITLE);
+		final String text = notification.extras.getString(Notification.EXTRA_TEXT);
+		final String app = getApplicationName(packageName);
+
+		if (title == null || text == null)
+			return null;
+
+		Bitmap icon = (Bitmap)notification.extras.get(Notification.EXTRA_LARGE_ICON);
+
+		if (icon == null)
+			icon = ((BitmapDrawable) getResources().getDrawable(R.drawable.icon)).getBitmap();
+
+		Integer zero = Integer.valueOf(0);
+		Object[] body = new Object[]
+		{
+			"type", zero,
+			"title", title,
+			"msg", text,
+			"duration", Integer.valueOf(determineDisplayTime(title, text) / 1000),
+			"fontsize", zero,
+			"position", zero,
+			"width", zero,
+			"bkgcolor", "#000000",
+			"transparency", zero,
+			"offset", zero,
+			"offsety", zero,
+			"app", app,
+			"force", Boolean.valueOf(true),
+			"filename", BitmapHelper.getBytes(icon)
+		};
+
+		byte[] result;
+		try
+		{
+			result = HttpHelper.generateMultipartBody(body);
+		}
+		catch (IOException ex)
+		{
+			return null;
+		}
+
+		return new Object[] { "multipart/form-data; boundary=" + HttpHelper.SEPARATOR, result };
 	}
 
 	private final Object[] getPayloadJson(String packageName, Notification notification)
