@@ -11,13 +11,6 @@
 			android:summary="@string/wifionly_summary"
 			android:key="@string/key_wifionly"
 			android:defaultValue="false" />
-		<ListPreference
-			android:title="@string/protocol"
-			android:summary="@string/protocol_summary"
-			android:key="@string/key_protocol"
-			android:entries="@array/protocols"
-			android:entryValues="@array/protocol_names"
-			android:defaultValue="@string/protocol_kodi" />
 		<Preference
 			android:title="@string/notification_access"
 			android:summary="@string/notification_access_summary">
@@ -31,6 +24,13 @@
 			android:summary="@string/url_summary"
 			android:inputType="textUri"
 			android:defaultValue="http://htpc:8080/jsonrpc" />
+		<ListPreference
+			android:title="@string/protocol"
+			android:summary="@string/protocol_summary"
+			android:key="@string/key_protocol"
+			android:entries="@array/protocols"
+			android:entryValues="@array/protocol_names"
+			android:defaultValue="@string/protocol_kodi" />
 		<CheckBoxPreference
 			android:title="@string/enable_auth"
 			android:summary="@string/enable_auth_summary"
