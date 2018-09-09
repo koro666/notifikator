@@ -11,6 +11,7 @@
 		<platform>all</platform>
 		<summary lang="en">Notifikator</summary>
 		<description lang="en">Notifikator Kodi Addon - adds support for images in notifications.</description>
+		<source>https://github.com/koro666/notifikator</source>
 		<assets>
 			<icon>resources/icon.png</icon>
 		</assets>
