@@ -1,22 +1,38 @@
 package net.kzxiv.notify.client;
 
 import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
 final class HttpHelper
 {
-	public final static String DASHDASH = "--";
-	public final static String NEWLINE = "\r\n";
-	public final static String SEPARATOR = "********";
+	private static final char[] HEXCHARS = new char[]
+		{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-	public final static byte[] generateMultipartBody(Object[] entries) throws IOException
+	public final static String generateMultipartSeparator()
 	{
-		ByteArrayOutputStream strm0 = null;
-		DataOutputStream strm1 = null;
-		byte[] result;
+		final Random random = new Random();
+		final StringBuilder builder = new StringBuilder(40);
+
+		builder.append("------------------------");
+		for (int i = 0; i < 16; ++i)
+			builder.append(HEXCHARS[random.nextInt(16)]);
+
+		return builder.toString();
+	}
+
+	public final static byte[] generateMultipartBody(String separator, Object[] entries, Charset charset) throws IOException
+	{
+		ByteArrayOutputStream strm = null;
 		try
 		{
-			strm0 = new ByteArrayOutputStream();
-			strm1 = new DataOutputStream(strm0);
+			final Charset ascii = Charset.forName("US-ASCII");
+			final byte[] newlineBytes = "\r\n".getBytes(ascii);
+			final byte[] binaryTypeBytes = "Content-Type: application/octet-stream\r\nContent-Transfer-Encoding: binary\r\n".getBytes(ascii);
+			final byte[] textTypeBytes = "Content-Type: text/plain\r\n".getBytes(ascii);
+			final byte[] separatorBytes = String.format("--%s\r\n", separator).getBytes(ascii);
+
+			strm = new ByteArrayOutputStream();
 
 			final int count = entries.length;
 			for (int i = 0; i < count; i += 2)
@@ -27,53 +43,25 @@ final class HttpHelper
 				if (value == null)
 					continue;
 
-				strm1.writeBytes(DASHDASH);
-				strm1.writeBytes(SEPARATOR);
-				strm1.writeBytes(NEWLINE);
+				strm.write(separatorBytes);
 
 				final boolean binary = (value instanceof byte[]);
 
-				strm1.writeBytes(String.format("Content-Disposition: form-data; name=\"%s\"", key));
-				strm1.writeBytes(NEWLINE);
-
-				if (binary)
-				{
-					strm1.writeBytes("Content-Type: application/octet-stream");
-					strm1.writeBytes(NEWLINE);
-					strm1.writeBytes("Content-Transfer-Encoding: binary");
-					strm1.writeBytes(NEWLINE);
-				}
-				else
-				{
-					strm1.writeBytes("Content-Type: text/plain");
-					strm1.writeBytes(NEWLINE);
-				}
-
-				strm1.writeBytes(NEWLINE);
-
-				if (binary)
-					strm1.write((byte[])value);
-				else
-					strm1.writeBytes(value.toString());
-
-				strm1.writeBytes(NEWLINE);
+				strm.write(String.format("Content-Disposition: form-data; name=\"%s\"\r\n", key).getBytes(ascii));
+				strm.write(binary ? binaryTypeBytes : textTypeBytes);
+				strm.write(newlineBytes);
+				strm.write(binary ? (byte[])value : value.toString().getBytes(charset));
+				strm.write(newlineBytes);
 			}
 
-			strm1.writeBytes(DASHDASH);
-			strm1.writeBytes(SEPARATOR);
-			strm1.writeBytes(DASHDASH);
-			strm1.writeBytes(NEWLINE);
+			strm.write(separatorBytes);
 
-			strm1.flush();
-			return strm0.toByteArray();
+			return strm.toByteArray();
 		}
 		finally
 		{
-			if (strm1 != null)
-				strm1.close();
-
-			if (strm0 != null)
-				strm0.close();
+			if (strm != null)
+				strm.close();
 		}
 	}
 }

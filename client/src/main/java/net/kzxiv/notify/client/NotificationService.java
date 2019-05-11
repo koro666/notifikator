@@ -12,6 +12,7 @@ import android.service.notification.*;
 import android.util.*;
 import org.json.*;
 import java.io.*;
+import java.nio.charset.*;
 
 public class NotificationService extends NotificationListenerService
 {
@@ -206,8 +207,8 @@ public class NotificationService extends NotificationListenerService
 		if (icon == null)
 			icon = ((BitmapDrawable) getResources().getDrawable(R.drawable.icon)).getBitmap();
 
-		Integer zero = Integer.valueOf(0);
-		Object[] body = new Object[]
+		final Integer zero = Integer.valueOf(0);
+		final Object[] body = new Object[]
 		{
 			"type", zero,
 			"title", title,
@@ -225,17 +226,20 @@ public class NotificationService extends NotificationListenerService
 			"filename", BitmapHelper.getBytes(icon)
 		};
 
+		final String separator = HttpHelper.generateMultipartSeparator();
+		final Charset charset = Charset.forName("UTF-8");
+
 		byte[] result;
 		try
 		{
-			result = HttpHelper.generateMultipartBody(body);
+			result = HttpHelper.generateMultipartBody(separator, body, charset);
 		}
 		catch (IOException ex)
 		{
 			return null;
 		}
 
-		return new Object[] { "multipart/form-data; boundary=" + HttpHelper.SEPARATOR, result };
+		return new Object[] { "multipart/form-data; boundary=" + separator, result };
 	}
 
 	private final Object[] getPayloadJson(String packageName, Notification notification)
