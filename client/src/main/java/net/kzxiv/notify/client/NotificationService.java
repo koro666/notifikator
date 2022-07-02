@@ -254,6 +254,8 @@ public class NotificationService extends NotificationListenerService
 		{
 			if (title != null)
 				result.put("title", title);
+			if (packageName != null)
+				result.put("package", packageName);
 			if (text != null || iconSm != null || iconLg != null)
 			{
 				JSONObject options = new JSONObject();
